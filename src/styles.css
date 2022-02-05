@@ -1,0 +1,65 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  --ftp-zone1: #a4c2f4;
+  --ftp-zone2: #b6d7a8;
+  --ftp-zone3: #ffe599;
+  --ftp-zone4: #f6b26b;
+  --ftp-zone5: #e06666;
+}
+
+.ftp-zone1 .ftp-zone-bar {
+  background-color: var(--ftp-zone1);
+}
+.ftp-zone2 .ftp-zone-bar {
+  background-color: var(--ftp-zone2);
+}
+.ftp-zone3 .ftp-zone-bar {
+  background-color: var(--ftp-zone3);
+}
+.ftp-zone4 .ftp-zone-bar {
+  background-color: var(--ftp-zone4);
+}
+.ftp-zone5 .ftp-zone-bar {
+  background-color: var(--ftp-zone5);
+}
+
+.ftp-zone-bar {
+  height: 30px;
+}
+
+.App table > tbody > tr > td:nth-child(1) {
+  padding-right: 20px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.App table > tbody > tr > td:nth-child(2) {
+  padding-right: 20px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.participant {
+  margin-bottom: 30px;
+}
+
+.minFtp {
+  display: inline;
+  float: left;
+  margin-left: 5px;
+}
+
+.maxFtp {
+  display: inline;
+  float: right;
+  margin-right: 5px;
+}
+
+.inputField * {
+  vertical-align: middle;
+}
+
+.inputField > label {
+  margin-right: 5px;
+}
