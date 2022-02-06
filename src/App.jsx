@@ -76,9 +76,10 @@ export default function App() {
     if (!parsed || !Array.isArray(parsed) || parsed.length <= 0) return false;
     const headers = parsed[0];
 
-    var nameColumn = FindColumn(["name"], headers);
-    var ftpColumn = FindColumn(["ftp"], headers);
-    var phoneColumn = FindColumn(["phone", "cell"], headers);
+    const nameColumn = FindColumn(["name"], headers);
+    const ftpColumn = FindColumn(["ftp"], headers);
+    const phoneColumn = FindColumn(["phone", "cell"], headers);
+    const emailColumn = FindColumn(["email"], headers);
 
     const p = parsed
       .slice(1)
@@ -87,6 +88,7 @@ export default function App() {
           name: row[nameColumn],
           ftp: row[ftpColumn],
           phone: row[phoneColumn],
+          email: row[emailColumn],
           zoneData: CalcZones(row[ftpColumn])
         };
         console.debug(participant);
@@ -100,21 +102,30 @@ export default function App() {
     return false;
   }
 
-  function GetPhone(participant) {
+  function RenderPhone(participant) {
     if (
       participant.phone &&
       participant.phone.match(/^\+?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4,6}$/im)
     ) {
       const encodedPhone = encodeURIComponent(participant.phone);
-      const encodedMessage = encodeURIComponent(message);
-      console.debug(encodedMessage);
       return (
-        <span>
-          {" "}
-          <a href={`sms:+1${encodedPhone}&body=${encodedMessage}`}>
-            ({participant.phone})
-          </a>
+        <span className="phoneLink">
+          <a href={`sms:+1${encodedPhone}`}>({participant.phone})</a>
         </span>
+      );
+    }
+    return "";
+  }
+
+  function RenderEmail(participant) {
+    if (
+      participant.email &&
+      participant.email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
+    ) {
+      return (
+        <div>
+          <a href={`mailto:${participant.email}`}>({participant.email})</a>
+        </div>
       );
     }
     return "";
@@ -151,8 +162,9 @@ export default function App() {
           <div key={`participant-${participantIndex}`} className="participant">
             <div>
               {participant.name}
-              {GetPhone(participant)}
+              {RenderPhone(participant)}
             </div>
+            {RenderEmail(participant)}
             <div>FTP: {participant.ftp} watts</div>
             <table>
               <tbody>

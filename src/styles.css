@@ -1,11 +1,12 @@
 .App {
-  font-family: sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
   --ftp-zone1: #a4c2f4;
   --ftp-zone2: #b6d7a8;
   --ftp-zone3: #ffe599;
   --ftp-zone4: #f6b26b;
   --ftp-zone5: #e06666;
+  padding-bottom: 30px;
 }
 
 .ftp-zone1 .ftp-zone-bar {
@@ -62,4 +63,8 @@
 
 .inputField > label {
   margin-right: 5px;
+}
+
+.phoneLink {
+  margin-left: 5px;
 }
