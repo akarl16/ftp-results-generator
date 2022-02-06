@@ -68,3 +68,23 @@
 .phoneLink {
   margin-left: 5px;
 }
+
+.clipButton {
+  margin-bottom: 20px;
+}
+
+.renderedMessage {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.participantName {
+  font-weight: bold;
+}
+
+.renderedFtp {
+  font-weight: bold;
+  font-size: large;
+  padding: 0 5px;
+  background-color: #ae86e3;
+}

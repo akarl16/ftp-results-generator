@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import domtoimage from "dom-to-image";
-import { Button } from "@mui/material";
+import { Paper, Button } from "@mui/material";
+import Carousel from "react-material-ui-carousel";
 
 export default function App() {
   const zones = [
@@ -162,6 +163,52 @@ export default function App() {
     return "";
   }
 
+  function RenderParticipant(participant) {
+    return (
+      <div
+        key={`participant-${participant.participantIndex}`}
+        className="participant"
+        id={`participant-${participant.participantIndex}`}
+      >
+        <Button
+          variant="outlined"
+          onClick={() => ClipboardClick(participant)}
+          className="clipButton"
+        >
+          Clip
+        </Button>
+        <div className="renderedMessage">{message}</div>
+        <div>
+          <span className="participantName">{participant.name}</span>
+          {RenderPhone(participant)}
+        </div>
+        {RenderEmail(participant)}
+        <div>
+          <span className="renderedFtp">FTP: {participant.ftp} watts</span>
+        </div>
+        <table>
+          <tbody>
+            {participant.zoneData.map((zoneData, zoneIndex) => (
+              <tr
+                className={zoneData.zone.className}
+                key={`participant-${participant.participantIndex}-zone-${zoneIndex}`}
+              >
+                <td>{zoneData.zone.zoneName}</td>
+                <td>
+                  {zoneData.zone.minPct}% - {zoneData.zone.maxPct}%
+                </td>
+                <td className="ftp-zone-bar">
+                  <div className="minFtp">{`${zoneData.minWatts}w`}</div>
+                  <div className="maxFtp">{`${zoneData.maxWatts}w`}</div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
   console.debug(`participants`);
   console.debug(participants);
 
@@ -187,49 +234,9 @@ export default function App() {
           />
         </Box>
       </div>
-      <div>
-        <h1>Results</h1>
-        {participants.map((participant) => (
-          <div
-            key={`participant-${participant.participantIndex}`}
-            className="participant"
-            id={`participant-${participant.participantIndex}`}
-          >
-            <Button
-              variant="outlined"
-              onClick={() => ClipboardClick(participant)}
-              className="clipButton"
-            >
-              Clip
-            </Button>
-            <div>
-              {participant.name}
-              {RenderPhone(participant)}
-            </div>
-            {RenderEmail(participant)}
-            <div>FTP: {participant.ftp} watts</div>
-            <table>
-              <tbody>
-                {participant.zoneData.map((zoneData, zoneIndex) => (
-                  <tr
-                    className={zoneData.zone.className}
-                    key={`participant-${participant.participantIndex}-zone-${zoneIndex}`}
-                  >
-                    <td>{zoneData.zone.zoneName}</td>
-                    <td>
-                      {zoneData.zone.minPct}% - {zoneData.zone.maxPct}%
-                    </td>
-                    <td className="ftp-zone-bar">
-                      <div className="minFtp">{`${zoneData.minWatts}w`}</div>
-                      <div className="maxFtp">{`${zoneData.maxWatts}w`}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
-      </div>
+      <Carousel autoPlay={false}>
+        {participants.map((participant) => RenderParticipant(participant))}
+      </Carousel>
     </div>
   );
 }
