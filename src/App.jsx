@@ -107,7 +107,11 @@ export default function App() {
       return (
         <span>
           {" "}
-          <a href={`sms:+1${participant.phone}&body=${message}`}>
+          <a
+            href={`sms:+1${encodeURIComponent(
+              participant.phone
+            )}&body=${encodeURIComponent(message)}`}
+          >
             ({participant.phone})
           </a>
         </span>
