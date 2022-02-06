@@ -86,7 +86,8 @@ export default function App() {
         const participant = {
           name: row[nameColumn],
           ftp: row[ftpColumn],
-          phone: row[phoneColumn]
+          phone: row[phoneColumn],
+          zoneData: CalcZones(row[ftpColumn])
         };
         console.debug(participant);
         return participant;
@@ -104,14 +105,13 @@ export default function App() {
       participant.phone &&
       participant.phone.match(/^\+?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4,6}$/im)
     ) {
+      const encodedPhone = encodeURIComponent(participant.phone);
+      const encodedMessage = encodeURIComponent(message);
+      console.debug(encodedMessage);
       return (
         <span>
           {" "}
-          <a
-            href={`sms:+1${encodeURIComponent(
-              participant.phone
-            )}&body=${encodeURIComponent(message)}`}
-          >
+          <a href={`sms:+1${encodedPhone}&body=${encodedMessage}`}>
             ({participant.phone})
           </a>
         </span>
@@ -120,9 +120,6 @@ export default function App() {
     return "";
   }
 
-  participants.forEach((participant) => {
-    participant.zoneData = CalcZones(participant.ftp);
-  });
   console.debug(`participants`);
   console.debug(participants);
 
