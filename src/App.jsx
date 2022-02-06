@@ -2,6 +2,8 @@ import "./styles.css";
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import domtoimage from "dom-to-image";
+import { Button } from "@mui/material";
 
 export default function App() {
   const zones = [
@@ -83,13 +85,14 @@ export default function App() {
 
     const p = parsed
       .slice(1)
-      .map((row) => {
+      .map((row, index) => {
         const participant = {
           name: row[nameColumn],
           ftp: row[ftpColumn],
           phone: row[phoneColumn],
           email: row[emailColumn],
-          zoneData: CalcZones(row[ftpColumn])
+          zoneData: CalcZones(row[ftpColumn]),
+          participantIndex: index
         };
         console.debug(participant);
         return participant;
@@ -100,6 +103,34 @@ export default function App() {
     setParticipants(p);
 
     return false;
+  }
+
+  function ClipboardClick(participant) {
+    if (!participant) return;
+    domtoimage
+      .toBlob(
+        document.getElementById(`participant-${participant.participantIndex}`),
+        {
+          bgcolor: "white",
+          filter: (node) => {
+            return !node.classList || !node.classList.contains("clipButton");
+          }
+        }
+      )
+      .then(function (imageBlob) {
+        try {
+          navigator.clipboard.write([
+            new window.ClipboardItem({
+              [imageBlob.type]: imageBlob
+            })
+          ]);
+        } catch (error) {
+          console.error(error);
+        }
+      })
+      .catch(function (error) {
+        console.error("oops, something went wrong!", error);
+      });
   }
 
   function RenderPhone(participant) {
@@ -158,8 +189,19 @@ export default function App() {
       </div>
       <div>
         <h1>Results</h1>
-        {participants.map((participant, participantIndex) => (
-          <div key={`participant-${participantIndex}`} className="participant">
+        {participants.map((participant) => (
+          <div
+            key={`participant-${participant.participantIndex}`}
+            className="participant"
+            id={`participant-${participant.participantIndex}`}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => ClipboardClick(participant)}
+              className="clipButton"
+            >
+              Clip
+            </Button>
             <div>
               {participant.name}
               {RenderPhone(participant)}
@@ -171,7 +213,7 @@ export default function App() {
                 {participant.zoneData.map((zoneData, zoneIndex) => (
                   <tr
                     className={zoneData.zone.className}
-                    key={`participant-${participantIndex}-zone-${zoneIndex}`}
+                    key={`participant-${participant.participantIndex}-zone-${zoneIndex}`}
                   >
                     <td>{zoneData.zone.zoneName}</td>
                     <td>
