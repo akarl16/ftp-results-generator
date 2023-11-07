@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ftp-results-generator/static/css/main.279f4f4c.css",
+    "main.js": "/ftp-results-generator/static/js/main.66ca79c2.js",
+    "index.html": "/ftp-results-generator/index.html",
+    "main.279f4f4c.css.map": "/ftp-results-generator/static/css/main.279f4f4c.css.map",
+    "main.66ca79c2.js.map": "/ftp-results-generator/static/js/main.66ca79c2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.279f4f4c.css",
+    "static/js/main.66ca79c2.js"
+  ]
+}
