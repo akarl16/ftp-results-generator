@@ -1,10 +1,9 @@
 import "./styles.css";
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import domtoimage from "dom-to-image";
-import { Paper, Button } from "@mui/material";
+import { Fragment } from "react";
+import { Card, CardContent, Button, Box, Stack, TextField, Typography } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
+import domtoimage from "dom-to-image";
 
 export default function App() {
   const zones = [
@@ -41,9 +40,9 @@ export default function App() {
   ];
 
   const [participants, setParticipants] = useState([]);
-  const dataHelperText = "paste spreadsheet with\nName, FTP, Phone";
+  const dataHelperText = "paste spreadsheet with\nName, FTP, Email, Phone";
   const [message, setMessage] = useState(
-    "Hey it’s Adam Karl, PWR coach from life time. Great work! Attached is your FTP and power zones. The FTP number is calculated as 95% of the average watts from your 20-minute test. Way to go! Keep up your hard work and I can’t wait to see you at PWR again. Reach out with any questions at all, I am here for you! We are stronger together 🤙🏼"
+    "Hey it’s Adam Karl, PWR coach from Life Time. Great work! Attached is your FTP and power zones. The FTP number is calculated as 95% of the average watts from your 20-minute test. Way to go! Keep up your hard work and I can’t wait to see you at PWR again. Here is some additional explanation of the power zones we use but please reach out with any questions, I am here for you!\n\nhttps://www.trainingpeaks.com/blog/power-training-levels/\n\nWe are stronger together 🤙🏼"
   );
 
   function CalcZones(ftp_value) {
@@ -106,32 +105,39 @@ export default function App() {
     return false;
   }
 
-  function ClipboardClick(participant) {
+  async function EmailAndClipClick(participant) {
     if (!participant) return;
-    domtoimage
-      .toBlob(
-        document.getElementById(`participant-${participant.participantIndex}`),
-        {
-          bgcolor: "white",
-          filter: (node) => {
-            return !node.classList || !node.classList.contains("clipButton");
-          }
+    let imageBlob = await domtoimage.toBlob(
+      document.getElementById(`participant-${participant.participantIndex}`),
+      {
+        bgcolor: "white",
+        filter: (node) => {
+          return !node.classList || !node.classList.contains("clipButton");
         }
-      )
-      .then(function (imageBlob) {
-        try {
-          navigator.clipboard.write([
-            new window.ClipboardItem({
-              [imageBlob.type]: imageBlob
-            })
-          ]);
-        } catch (error) {
-          console.error(error);
-        }
-      })
-      .catch(function (error) {
-        console.error("oops, something went wrong!", error);
-      });
+      }
+    );
+
+    //Put the image on the clipboard
+    let clipboardItems = [];
+    clipboardItems.push(new window.ClipboardItem({
+      [imageBlob.type]: imageBlob
+    }));
+    await navigator.clipboard.write(clipboardItems);
+
+    //Put the email text on the clipboard
+    // clipboardItems = [];
+    // clipboardItems.push(new window.ClipboardItem({
+    //   "text/html": new Blob([message], {type: 'text/html'})
+    // }));
+    
+    // await navigator.clipboard.write(clipboardItems);
+
+    //Create a virtual link and click it
+    let mail = document.createElement("a");
+    let emailBody = encodeURIComponent(`${message}\n\n\n`)
+    mail.href = `mailto:${participant.email}?subject=PWR Cycling Zones&body=${emailBody}`;
+    mail.target = "_new";
+    mail.click();
   }
 
   function RenderPhone(participant) {
@@ -141,9 +147,9 @@ export default function App() {
     ) {
       const encodedPhone = encodeURIComponent(participant.phone);
       return (
-        <span className="phoneLink">
+        <Typography className="phoneLink">
           <a href={`sms:+1${encodedPhone}`}>({participant.phone})</a>
-        </span>
+        </Typography>
       );
     }
     return "";
@@ -155,9 +161,9 @@ export default function App() {
       participant.email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
     ) {
       return (
-        <div>
+        <Typography>
           <a href={`mailto:${participant.email}`}>({participant.email})</a>
-        </div>
+        </Typography>
       );
     }
     return "";
@@ -165,47 +171,52 @@ export default function App() {
 
   function RenderParticipant(participant) {
     return (
-      <div
-        key={`participant-${participant.participantIndex}`}
-        className="participant"
-        id={`participant-${participant.participantIndex}`}
-      >
-        <Button
-          variant="outlined"
-          onClick={() => ClipboardClick(participant)}
-          className="clipButton"
-        >
-          Clip
-        </Button>
+      <Stack spacing={2} sx={{ maxWidth: 500, marginLeft: "auto", marginRight: "auto" }}>
         <div className="renderedMessage">{message}</div>
         <div>
-          <span className="participantName">{participant.name}</span>
           {RenderPhone(participant)}
+          {RenderEmail(participant)}
         </div>
-        {RenderEmail(participant)}
         <div>
-          <span className="renderedFtp">FTP: {participant.ftp} watts</span>
+          <Button
+            variant="outlined"
+            onClick={async () => await EmailAndClipClick(participant)}
+            className="clipButton">
+            Email & Clip
+          </Button>
         </div>
-        <table>
-          <tbody>
-            {participant.zoneData.map((zoneData, zoneIndex) => (
-              <tr
-                className={zoneData.zone.className}
-                key={`participant-${participant.participantIndex}-zone-${zoneIndex}`}
-              >
-                <td>{zoneData.zone.zoneName}</td>
-                <td>
-                  {zoneData.zone.minPct}% - {zoneData.zone.maxPct}%
-                </td>
-                <td className="ftp-zone-bar">
-                  <div className="minFtp">{`${zoneData.minWatts}w`}</div>
-                  <div className="maxFtp">{`${zoneData.maxWatts}w`}</div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        <div
+          key={`participant-${participant.participantIndex}`}
+          className="participant"
+          id={`participant-${participant.participantIndex}`}
+        >
+          <Card variant="outlined">
+            <Typography variant="h5" component="div" className="renderedFtp">FTP: {participant.ftp} watts</Typography>
+            <table>
+              <tbody>
+                {participant.zoneData.map((zoneData, zoneIndex) => (
+                  <tr
+                    className={zoneData.zone.className}
+                    key={`participant-${participant.participantIndex}-zone-${zoneIndex}`}
+                  >
+                    <td>{zoneData.zone.zoneName}</td>
+                    <td>
+                      {zoneData.zone.minPct}% - {zoneData.zone.maxPct}%
+                    </td>
+                    <td className="ftp-zone-bar">
+                      <div className="minFtp">{`${zoneData.minWatts}w`}</div>
+                      <div className="maxFtp">{`${zoneData.maxWatts}w`}</div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <CardContent>
+              <Typography variant="h5" component="div" className="participantName">{participant.name}</Typography>
+            </CardContent>
+          </Card>
+        </div>
+      </Stack>
     );
   }
 
@@ -234,7 +245,7 @@ export default function App() {
           />
         </Box>
       </div>
-      <Carousel autoPlay={false}>
+      <Carousel autoPlay={false} navButtonsAlwaysVisible={true} indicators={false} sx={{ maxWidth: 700, marginLeft: "auto", marginRight: "auto" }}>
         {participants.map((participant) => RenderParticipant(participant))}
       </Carousel>
     </div>

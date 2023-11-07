@@ -7,6 +7,9 @@
   --ftp-zone4: #f6b26b;
   --ftp-zone5: #e06666;
   padding-bottom: 30px;
+  max-width: 900px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .ftp-zone1 .ftp-zone-bar {
@@ -65,22 +68,22 @@
   margin-right: 5px;
 }
 
-.phoneLink {
+/* .phoneLink {
   margin-left: 5px;
-}
+} */
 
 .clipButton {
   margin-bottom: 20px;
 }
 
-.renderedMessage {
+/* .renderedMessage {
   text-align: left;
   margin-bottom: 10px;
-}
+} */
 
-.participantName {
+/* .participantName {
   font-weight: bold;
-}
+} */
 
 .renderedFtp {
   font-weight: bold;
