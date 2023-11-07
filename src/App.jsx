@@ -43,7 +43,7 @@ export default function App() {
   const [participants, setParticipants] = useState([]);
   const dataHelperText = "paste spreadsheet with\nName, FTP, Phone";
   const [message, setMessage] = useState(
-    "Hey it’s Bri Alexander, PWR coach from life time. Great work! Attached is your FTP and power zones. The FTP number is calculated as 95% of the average watts from your 20-minute test. Way to go! Keep up your hard work and I can’t wait to see you at PWR again. Reach out with any questions at all, I am here for you! We are stronger together 🤙🏼"
+    "Hey it’s Adam Karl, PWR coach from life time. Great work! Attached is your FTP and power zones. The FTP number is calculated as 95% of the average watts from your 20-minute test. Way to go! Keep up your hard work and I can’t wait to see you at PWR again. Reach out with any questions at all, I am here for you! We are stronger together 🤙🏼"
   );
 
   function CalcZones(ftp_value) {
