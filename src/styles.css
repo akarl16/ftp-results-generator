@@ -15,15 +15,19 @@
 .ftp-zone1 .ftp-zone-bar {
   background-color: var(--ftp-zone1);
 }
+
 .ftp-zone2 .ftp-zone-bar {
   background-color: var(--ftp-zone2);
 }
+
 .ftp-zone3 .ftp-zone-bar {
   background-color: var(--ftp-zone3);
 }
+
 .ftp-zone4 .ftp-zone-bar {
   background-color: var(--ftp-zone4);
 }
+
 .ftp-zone5 .ftp-zone-bar {
   background-color: var(--ftp-zone5);
 }
@@ -32,20 +36,21 @@
   height: 30px;
 }
 
-.App table > tbody > tr > td:nth-child(1) {
+.App table>tbody>tr>td:nth-child(1) {
   padding-right: 20px;
   width: 1%;
   white-space: nowrap;
 }
 
-.App table > tbody > tr > td:nth-child(2) {
+.App table>tbody>tr>td:nth-child(2) {
   padding-right: 20px;
   width: 1%;
   white-space: nowrap;
 }
 
-.participant {
-  margin-bottom: 30px;
+.ftpTable {
+  border-collapse: collapse;
+  margin-left: 5px;
 }
 
 .minFtp {
@@ -64,26 +69,13 @@
   vertical-align: middle;
 }
 
-.inputField > label {
+.inputField>label {
   margin-right: 5px;
 }
-
-/* .phoneLink {
-  margin-left: 5px;
-} */
 
 .clipButton {
   margin-bottom: 20px;
 }
-
-/* .renderedMessage {
-  text-align: left;
-  margin-bottom: 10px;
-} */
-
-/* .participantName {
-  font-weight: bold;
-} */
 
 .renderedFtp {
   font-weight: bold;

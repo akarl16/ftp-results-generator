@@ -185,14 +185,14 @@ export default function App() {
             Email & Clip
           </Button>
         </div>
-        <div
+        <Box
           key={`participant-${participant.participantIndex}`}
           className="participant"
           id={`participant-${participant.participantIndex}`}
         >
-          <Card variant="outlined">
+          <Card variant="outlined" sx={{ marginBottom: 16 }}>
             <Typography variant="h5" component="div" className="renderedFtp">FTP: {participant.ftp} watts</Typography>
-            <table>
+            <table className="ftpTable">
               <tbody>
                 {participant.zoneData.map((zoneData, zoneIndex) => (
                   <tr
@@ -215,7 +215,7 @@ export default function App() {
               <Typography variant="h5" component="div" className="participantName">{participant.name}</Typography>
             </CardContent>
           </Card>
-        </div>
+        </Box>
       </Stack>
     );
   }
